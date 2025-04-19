@@ -37,6 +37,14 @@ def create_user_command(username, password):
     create_user(username, password)
     print(f'{username} created!')
 
+# creates an admin
+@user_cli.command("createadmin", help="Creates an admin user")
+@click.argument("username", default="james")
+@click.argument("password", default="jamespass")
+def create_admin_command(username, password):
+    create_user(username, password, role='admin')
+    print(f'Admin {username} created!')
+
 # this command will be : flask user create bob bobpass
 
 @user_cli.command("list", help="Lists users in the database")

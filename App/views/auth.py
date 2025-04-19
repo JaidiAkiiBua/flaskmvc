@@ -31,17 +31,42 @@ def identify_page():
 def login_action():
     data = request.form
     token = login(data['username'], data['password'])
-    response = redirect(request.referrer)
     if not token:
-        flash('Bad username or password given'), 401
+        flash('Bad username or password given', 'danger')
+        return redirect(url_for('auth_views.login_page'))
+        
+    from App.models import User
+    user = User.query.filter_by(username=data['username']).first()
+    
+    if user is None:
+        flash('User not found after login?', 'danger')
+        return redirect(url_for('auth_views.login_page'))
+    
+    # Debug: Print user role to console
+    print(f"User {user.username} logged in with role: {user.role}")
+    
+    flash('Login Successful', 'success')
+    
+    # Role-based redirect
+    if user.role == 'admin':
+        redirect_url = url_for('admin.index')
     else:
-        flash('Login Successful')
-        set_access_cookies(response, token) 
+        redirect_url = url_for('user_views.user_index')
+    
+    print(f"Redirecting to: {redirect_url}")
+    
+    response = redirect(redirect_url)
+    set_access_cookies(response, token)
     return response
+
+@auth_views.route('/login', methods=['GET'])
+def login_page():
+    return render_template('index.html')
+
 
 @auth_views.route('/logout', methods=['GET'])
 def logout_action():
-    response = redirect(request.referrer) 
+    response = redirect(url_for('auth_views.login_page')) 
     flash("Logged Out!")
     unset_jwt_cookies(response)
     return response

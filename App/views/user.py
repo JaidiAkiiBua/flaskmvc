@@ -12,6 +12,12 @@ from App.controllers import (
 
 user_views = Blueprint('user_views', __name__, template_folder='../templates')
 
+
+@user_views.route('/user_index')
+@jwt_required()
+def user_index():
+    return render_template('user/user_index.html')
+
 @user_views.route('/users', methods=['GET'])
 def get_user_page():
     users = get_all_users()
