@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %}Update Report{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1>Update Report</h1>
+            
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group mb-3">
+                    <label for="title">Report Title</label>
+                    <input type="text" class="form-control" id="title" name="title" value="{{ report.title }}" required>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label for="admin_name">Admin Name</label>
+                    <input type="text" class="form-control" id="admin_name" name="admin_name" value="{{ report.admin_name }}" required>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label for="campus">Campus</label>
+                    <select class="form-control" id="campus" name="campus" required>
+                        <option value="">Select Campus</option>
+                        <option value="Main Campus" {% if report.campus == 'Main Campus' %}selected{% endif %}>Main Campus</option>
+                        <option value="North Campus" {% if report.campus == 'North Campus' %}selected{% endif %}>North Campus</option>
+                        <option value="South Campus" {% if report.campus == 'South Campus' %}selected{% endif %}>South Campus</option>
+                        <option value="East Campus" {% if report.campus == 'East Campus' %}selected{% endif %}>East Campus</option>
+                        <option value="West Campus" {% if report.campus == 'West Campus' %}selected{% endif %}>West Campus</option>
+                    </select>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label for="year">Year</label>
+                    <input type="number" class="form-control" id="year" name="year" min="2000" max="2100" value="{{ report.year }}" required>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label for="excel_file">Excel File (leave empty to keep existing data)</label>
+                    <input type="file" class="form-control" id="excel_file" name="excel_file" accept=".xlsx,.xls">
+                    <small class="form-text text-muted">Uploading a new file will replace all existing data.</small>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Update Report</button>
+                <a href="{{ url_for('report_views.view_report', report_id=report.id) }}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

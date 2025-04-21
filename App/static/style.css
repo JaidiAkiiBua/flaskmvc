@@ -1,3 +1,44 @@
-html {
-    padding: 0;
+/* Form styling */
+.form-control {
+    border-radius: 5px;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+/* Alert customization */
+.alert {
+    border-radius: 5px;
+}
+
+/* Chart container */
+#reportChart {
+    max-height: 400px;
+}
+
+/* Admin layout specific */
+@media (min-width: 768px) {
+    .navbar-brand {
+        font-size: 1.5rem;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar-collapse {
+        padding: 10px 0;
+    }
+    
+    .navbar-nav .nav-link {
+        padding: 8px 0;
+    }
+}
+
+/* Footer if you decide to add one */
+footer {
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    margin-top: 50px;
+    border-top: 1px solid #dee2e6;
 }

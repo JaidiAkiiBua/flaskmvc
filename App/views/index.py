@@ -12,9 +12,9 @@ def index_page():
         # Try to verify JWT, but don't require it
         verify_jwt_in_request(optional=True)
         
-        if current_user:  # User is authenticated
+        if current_user and current_user.is_authenticated:  # User is authenticated
             if current_user.role == 'admin':
-                return redirect(url_for('admin.index'))
+                return redirect(url_for('admin_views.admin_index'))
             else:
                 return redirect(url_for('user_views.user_index'))
         else:
@@ -23,6 +23,7 @@ def index_page():
     except:
         # If JWT verification fails, redirect to login
         return redirect(url_for('auth_views.login_page'))
+
 
 @index_views.route('/init', methods=['GET'])
 def init():

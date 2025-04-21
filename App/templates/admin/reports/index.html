@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Admin Dashboard</h2>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Reports Management</h5>
+                    <p class="card-text">Manage all reports in the system.</p>
+                    <a href="{{ url_for('report_views.list_reports') }}" class="btn btn-primary">View Reports</a>
+                    <a href="{{ url_for('report_views.create_report_page') }}" class="btn btn-success">Generate Report</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">User Management</h5>
+                    <p class="card-text">Manage user accounts and permissions.</p>
+                    <a href="{{ url_for('user_views.get_user_page') }}" class="btn btn-primary">Manage Users</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

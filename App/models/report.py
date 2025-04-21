@@ -1,30 +1,34 @@
+from datetime import datetime
 from App.database import db
-from .faculty import Faculty
-import os,string, random
-from werkzeug.utils import secure_filename
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
 
 class Report(db.Model):
+    __tablename__ = 'reports'
+    
     id = db.Column(db.Integer, primary_key=True)
-    filename = db.Column(db.String, nullable=False)
-    created_at = db.Column(db.DateTime, default=db.func.now())
-
-    def __init__(self, file):
-        self.filename = self.store_file(file)
-
-    def random_string():
-        return ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
-
-    def remove_file(filename):
-        try:
-            os.remove(os.path.join('App/reports', filename))
-        except:
-            print('file already Deleted')
+    title = db.Column(db.String(200), nullable=False)
+    admin_name = db.Column(db.String(100), nullable=False)
+    campus = db.Column(db.String(100), nullable=False)
+    year = db.Column(db.Integer, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     
-    def get_url(self):
-        return f'/reports/{self.filename}'
+    # Relationship with ExcelData
+    excel_data = db.relationship('ExcelData', backref='report', lazy=True, cascade='all, delete-orphan')
     
-    def store_file(self, file):
-        extension = os.path.splitext(file.filename)[1]
-        newname = secure_filename(self.random_string() + extension)
-        file.save(os.path.join('reports', newname))
-        return newname
+    def __repr__(self):
+        return f'<Report {self.title}>'
+    
+    def get_json(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'admin_name': self.admin_name,
+            'campus': self.campus,
+            'year': self.year,
+            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'user_id': self.user_id
+        }

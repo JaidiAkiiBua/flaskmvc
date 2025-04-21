@@ -2,7 +2,7 @@
 from flask_admin.contrib.sqla import ModelView
 from flask import redirect, url_for, request, flash, Blueprint
 from flask_admin import Admin
-from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
+from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity, current_user
 from App.models import db, User
 from flask import Blueprint, render_template
 from flask_jwt_extended import jwt_required
@@ -29,7 +29,10 @@ def setup_admin(app):
 
 admin_views = Blueprint('admin_views', __name__, template_folder='../templates')
 
-@admin_views.route('/admin_index')
+@admin_views.route('/admin/index.html')
 @jwt_required()
 def admin_index():
+    if current_user.role != 'admin':
+        flash('Admin access only.', 'danger')
+        return redirect(url_for('user_views.user_index'))
     return render_template('admin/index.html')
